@@ -1,0 +1,28 @@
+{
+  "name": "grpc-xendit",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node dist/index.js",
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.12.3",
+    "@grpc/proto-loader": "^0.7.13",
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.6"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/node": "^22.9.3",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "ts-proto": "^2.3.0",
+    "typescript": "^5.7.2"
+  }
+}

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+// npx protoc --ts_proto_out=src/generated/ --proto_path=src/proto src/proto/*.proto
+
+
+package xendit;
+
+service paymentService {
+    rpc CreateInvoice (CreateInvoiceRequest) returns (InvoiceResponse);
+}
+
+message CreateInvoiceRequest {
+    string external_id = 1;
+    int32 amount = 2;
+    string payer_email = 3;
+    string description = 4;
+    string credentials = 5;
+}
+
+message InvoiceResponse {
+    string id = 1;
+    string externalId = 2;
+    string status = 3;
+    int32 amount = 4;
+    string invoiceUrl = 5;
+    string description = 6;
+}
