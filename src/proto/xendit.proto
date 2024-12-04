@@ -2,7 +2,6 @@ syntax = "proto3";
 
 // npx protoc --ts_proto_out=src/generated/ --proto_path=src/proto src/proto/*.proto
 
-
 package xendit;
 
 service paymentService {
@@ -19,9 +18,35 @@ message CreateInvoiceRequest {
 
 message InvoiceResponse {
     string id = 1;
-    string externalId = 2;
+    string extenalId = 2;
     string status = 3;
-    int32 amount = 4;
-    string invoiceUrl = 5;
-    string description = 6;
+    int32 amount = 6;
+    string description = 7;
+    string invoicesUrl = 8;
+    repeated availableBanks availableBanks = 9;
+    repeated availableEwallets availableEwallets = 10;
+    repeated availableQrCode availableQrCode = 11;
+    repeated availableOTR availableOTR = 12;
+    string currency = 13;
+}
+
+message availableBanks {
+    string bank_code = 1;
+    string collection_type = 2;
+    int32 transfer_amount = 3;
+    string bank_branch = 4;
+    string account_holder_name = 5;
+    int32 identity_amount = 6;
+}
+
+message availableEwallets {
+    string ewallet_type = 1;
+}
+
+message availableQrCode {
+    string qr_code_type = 1;
+}
+
+message availableOTR {
+    string retail_outlet_name = 1;
 }

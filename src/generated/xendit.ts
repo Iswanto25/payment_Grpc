@@ -19,11 +19,37 @@ export interface CreateInvoiceRequest {
 
 export interface InvoiceResponse {
   id: string;
-  externalId: string;
+  extenalId: string;
   status: string;
   amount: number;
-  invoiceUrl: string;
   description: string;
+  invoicesUrl: string;
+  availableBanks: availableBanks[];
+  availableEwallets: availableEwallets[];
+  availableQrCode: availableQrCode[];
+  availableOTR: availableOTR[];
+  currency: string;
+}
+
+export interface availableBanks {
+  bankCode: string;
+  collectionType: string;
+  transferAmount: number;
+  bankBranch: string;
+  accountHolderName: string;
+  identityAmount: number;
+}
+
+export interface availableEwallets {
+  ewalletType: string;
+}
+
+export interface availableQrCode {
+  qrCodeType: string;
+}
+
+export interface availableOTR {
+  retailOutletName: string;
 }
 
 function createBaseCreateInvoiceRequest(): CreateInvoiceRequest {
@@ -151,7 +177,19 @@ export const CreateInvoiceRequest: MessageFns<CreateInvoiceRequest> = {
 };
 
 function createBaseInvoiceResponse(): InvoiceResponse {
-  return { id: "", externalId: "", status: "", amount: 0, invoiceUrl: "", description: "" };
+  return {
+    id: "",
+    extenalId: "",
+    status: "",
+    amount: 0,
+    description: "",
+    invoicesUrl: "",
+    availableBanks: [],
+    availableEwallets: [],
+    availableQrCode: [],
+    availableOTR: [],
+    currency: "",
+  };
 }
 
 export const InvoiceResponse: MessageFns<InvoiceResponse> = {
@@ -159,20 +197,35 @@ export const InvoiceResponse: MessageFns<InvoiceResponse> = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.externalId !== "") {
-      writer.uint32(18).string(message.externalId);
+    if (message.extenalId !== "") {
+      writer.uint32(18).string(message.extenalId);
     }
     if (message.status !== "") {
       writer.uint32(26).string(message.status);
     }
     if (message.amount !== 0) {
-      writer.uint32(32).int32(message.amount);
-    }
-    if (message.invoiceUrl !== "") {
-      writer.uint32(42).string(message.invoiceUrl);
+      writer.uint32(48).int32(message.amount);
     }
     if (message.description !== "") {
-      writer.uint32(50).string(message.description);
+      writer.uint32(58).string(message.description);
+    }
+    if (message.invoicesUrl !== "") {
+      writer.uint32(66).string(message.invoicesUrl);
+    }
+    for (const v of message.availableBanks) {
+      availableBanks.encode(v!, writer.uint32(74).fork()).join();
+    }
+    for (const v of message.availableEwallets) {
+      availableEwallets.encode(v!, writer.uint32(82).fork()).join();
+    }
+    for (const v of message.availableQrCode) {
+      availableQrCode.encode(v!, writer.uint32(90).fork()).join();
+    }
+    for (const v of message.availableOTR) {
+      availableOTR.encode(v!, writer.uint32(98).fork()).join();
+    }
+    if (message.currency !== "") {
+      writer.uint32(106).string(message.currency);
     }
     return writer;
   },
@@ -197,7 +250,7 @@ export const InvoiceResponse: MessageFns<InvoiceResponse> = {
             break;
           }
 
-          message.externalId = reader.string();
+          message.extenalId = reader.string();
           continue;
         }
         case 3: {
@@ -208,28 +261,68 @@ export const InvoiceResponse: MessageFns<InvoiceResponse> = {
           message.status = reader.string();
           continue;
         }
-        case 4: {
-          if (tag !== 32) {
+        case 6: {
+          if (tag !== 48) {
             break;
           }
 
           message.amount = reader.int32();
           continue;
         }
-        case 5: {
-          if (tag !== 42) {
-            break;
-          }
-
-          message.invoiceUrl = reader.string();
-          continue;
-        }
-        case 6: {
-          if (tag !== 50) {
+        case 7: {
+          if (tag !== 58) {
             break;
           }
 
           message.description = reader.string();
+          continue;
+        }
+        case 8: {
+          if (tag !== 66) {
+            break;
+          }
+
+          message.invoicesUrl = reader.string();
+          continue;
+        }
+        case 9: {
+          if (tag !== 74) {
+            break;
+          }
+
+          message.availableBanks.push(availableBanks.decode(reader, reader.uint32()));
+          continue;
+        }
+        case 10: {
+          if (tag !== 82) {
+            break;
+          }
+
+          message.availableEwallets.push(availableEwallets.decode(reader, reader.uint32()));
+          continue;
+        }
+        case 11: {
+          if (tag !== 90) {
+            break;
+          }
+
+          message.availableQrCode.push(availableQrCode.decode(reader, reader.uint32()));
+          continue;
+        }
+        case 12: {
+          if (tag !== 98) {
+            break;
+          }
+
+          message.availableOTR.push(availableOTR.decode(reader, reader.uint32()));
+          continue;
+        }
+        case 13: {
+          if (tag !== 106) {
+            break;
+          }
+
+          message.currency = reader.string();
           continue;
         }
       }
@@ -244,11 +337,24 @@ export const InvoiceResponse: MessageFns<InvoiceResponse> = {
   fromJSON(object: any): InvoiceResponse {
     return {
       id: isSet(object.id) ? globalThis.String(object.id) : "",
-      externalId: isSet(object.externalId) ? globalThis.String(object.externalId) : "",
+      extenalId: isSet(object.extenalId) ? globalThis.String(object.extenalId) : "",
       status: isSet(object.status) ? globalThis.String(object.status) : "",
       amount: isSet(object.amount) ? globalThis.Number(object.amount) : 0,
-      invoiceUrl: isSet(object.invoiceUrl) ? globalThis.String(object.invoiceUrl) : "",
       description: isSet(object.description) ? globalThis.String(object.description) : "",
+      invoicesUrl: isSet(object.invoicesUrl) ? globalThis.String(object.invoicesUrl) : "",
+      availableBanks: globalThis.Array.isArray(object?.availableBanks)
+        ? object.availableBanks.map((e: any) => availableBanks.fromJSON(e))
+        : [],
+      availableEwallets: globalThis.Array.isArray(object?.availableEwallets)
+        ? object.availableEwallets.map((e: any) => availableEwallets.fromJSON(e))
+        : [],
+      availableQrCode: globalThis.Array.isArray(object?.availableQrCode)
+        ? object.availableQrCode.map((e: any) => availableQrCode.fromJSON(e))
+        : [],
+      availableOTR: globalThis.Array.isArray(object?.availableOTR)
+        ? object.availableOTR.map((e: any) => availableOTR.fromJSON(e))
+        : [],
+      currency: isSet(object.currency) ? globalThis.String(object.currency) : "",
     };
   },
 
@@ -257,8 +363,8 @@ export const InvoiceResponse: MessageFns<InvoiceResponse> = {
     if (message.id !== "") {
       obj.id = message.id;
     }
-    if (message.externalId !== "") {
-      obj.externalId = message.externalId;
+    if (message.extenalId !== "") {
+      obj.extenalId = message.extenalId;
     }
     if (message.status !== "") {
       obj.status = message.status;
@@ -266,11 +372,26 @@ export const InvoiceResponse: MessageFns<InvoiceResponse> = {
     if (message.amount !== 0) {
       obj.amount = Math.round(message.amount);
     }
-    if (message.invoiceUrl !== "") {
-      obj.invoiceUrl = message.invoiceUrl;
-    }
     if (message.description !== "") {
       obj.description = message.description;
+    }
+    if (message.invoicesUrl !== "") {
+      obj.invoicesUrl = message.invoicesUrl;
+    }
+    if (message.availableBanks?.length) {
+      obj.availableBanks = message.availableBanks.map((e) => availableBanks.toJSON(e));
+    }
+    if (message.availableEwallets?.length) {
+      obj.availableEwallets = message.availableEwallets.map((e) => availableEwallets.toJSON(e));
+    }
+    if (message.availableQrCode?.length) {
+      obj.availableQrCode = message.availableQrCode.map((e) => availableQrCode.toJSON(e));
+    }
+    if (message.availableOTR?.length) {
+      obj.availableOTR = message.availableOTR.map((e) => availableOTR.toJSON(e));
+    }
+    if (message.currency !== "") {
+      obj.currency = message.currency;
     }
     return obj;
   },
@@ -281,11 +402,337 @@ export const InvoiceResponse: MessageFns<InvoiceResponse> = {
   fromPartial<I extends Exact<DeepPartial<InvoiceResponse>, I>>(object: I): InvoiceResponse {
     const message = createBaseInvoiceResponse();
     message.id = object.id ?? "";
-    message.externalId = object.externalId ?? "";
+    message.extenalId = object.extenalId ?? "";
     message.status = object.status ?? "";
     message.amount = object.amount ?? 0;
-    message.invoiceUrl = object.invoiceUrl ?? "";
     message.description = object.description ?? "";
+    message.invoicesUrl = object.invoicesUrl ?? "";
+    message.availableBanks = object.availableBanks?.map((e) => availableBanks.fromPartial(e)) || [];
+    message.availableEwallets = object.availableEwallets?.map((e) => availableEwallets.fromPartial(e)) || [];
+    message.availableQrCode = object.availableQrCode?.map((e) => availableQrCode.fromPartial(e)) || [];
+    message.availableOTR = object.availableOTR?.map((e) => availableOTR.fromPartial(e)) || [];
+    message.currency = object.currency ?? "";
+    return message;
+  },
+};
+
+function createBaseavailableBanks(): availableBanks {
+  return {
+    bankCode: "",
+    collectionType: "",
+    transferAmount: 0,
+    bankBranch: "",
+    accountHolderName: "",
+    identityAmount: 0,
+  };
+}
+
+export const availableBanks: MessageFns<availableBanks> = {
+  encode(message: availableBanks, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.bankCode !== "") {
+      writer.uint32(10).string(message.bankCode);
+    }
+    if (message.collectionType !== "") {
+      writer.uint32(18).string(message.collectionType);
+    }
+    if (message.transferAmount !== 0) {
+      writer.uint32(24).int32(message.transferAmount);
+    }
+    if (message.bankBranch !== "") {
+      writer.uint32(34).string(message.bankBranch);
+    }
+    if (message.accountHolderName !== "") {
+      writer.uint32(42).string(message.accountHolderName);
+    }
+    if (message.identityAmount !== 0) {
+      writer.uint32(48).int32(message.identityAmount);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): availableBanks {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseavailableBanks();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.bankCode = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.collectionType = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 24) {
+            break;
+          }
+
+          message.transferAmount = reader.int32();
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.bankBranch = reader.string();
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.accountHolderName = reader.string();
+          continue;
+        }
+        case 6: {
+          if (tag !== 48) {
+            break;
+          }
+
+          message.identityAmount = reader.int32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): availableBanks {
+    return {
+      bankCode: isSet(object.bankCode) ? globalThis.String(object.bankCode) : "",
+      collectionType: isSet(object.collectionType) ? globalThis.String(object.collectionType) : "",
+      transferAmount: isSet(object.transferAmount) ? globalThis.Number(object.transferAmount) : 0,
+      bankBranch: isSet(object.bankBranch) ? globalThis.String(object.bankBranch) : "",
+      accountHolderName: isSet(object.accountHolderName) ? globalThis.String(object.accountHolderName) : "",
+      identityAmount: isSet(object.identityAmount) ? globalThis.Number(object.identityAmount) : 0,
+    };
+  },
+
+  toJSON(message: availableBanks): unknown {
+    const obj: any = {};
+    if (message.bankCode !== "") {
+      obj.bankCode = message.bankCode;
+    }
+    if (message.collectionType !== "") {
+      obj.collectionType = message.collectionType;
+    }
+    if (message.transferAmount !== 0) {
+      obj.transferAmount = Math.round(message.transferAmount);
+    }
+    if (message.bankBranch !== "") {
+      obj.bankBranch = message.bankBranch;
+    }
+    if (message.accountHolderName !== "") {
+      obj.accountHolderName = message.accountHolderName;
+    }
+    if (message.identityAmount !== 0) {
+      obj.identityAmount = Math.round(message.identityAmount);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<availableBanks>, I>>(base?: I): availableBanks {
+    return availableBanks.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<availableBanks>, I>>(object: I): availableBanks {
+    const message = createBaseavailableBanks();
+    message.bankCode = object.bankCode ?? "";
+    message.collectionType = object.collectionType ?? "";
+    message.transferAmount = object.transferAmount ?? 0;
+    message.bankBranch = object.bankBranch ?? "";
+    message.accountHolderName = object.accountHolderName ?? "";
+    message.identityAmount = object.identityAmount ?? 0;
+    return message;
+  },
+};
+
+function createBaseavailableEwallets(): availableEwallets {
+  return { ewalletType: "" };
+}
+
+export const availableEwallets: MessageFns<availableEwallets> = {
+  encode(message: availableEwallets, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.ewalletType !== "") {
+      writer.uint32(10).string(message.ewalletType);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): availableEwallets {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseavailableEwallets();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.ewalletType = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): availableEwallets {
+    return { ewalletType: isSet(object.ewalletType) ? globalThis.String(object.ewalletType) : "" };
+  },
+
+  toJSON(message: availableEwallets): unknown {
+    const obj: any = {};
+    if (message.ewalletType !== "") {
+      obj.ewalletType = message.ewalletType;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<availableEwallets>, I>>(base?: I): availableEwallets {
+    return availableEwallets.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<availableEwallets>, I>>(object: I): availableEwallets {
+    const message = createBaseavailableEwallets();
+    message.ewalletType = object.ewalletType ?? "";
+    return message;
+  },
+};
+
+function createBaseavailableQrCode(): availableQrCode {
+  return { qrCodeType: "" };
+}
+
+export const availableQrCode: MessageFns<availableQrCode> = {
+  encode(message: availableQrCode, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.qrCodeType !== "") {
+      writer.uint32(10).string(message.qrCodeType);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): availableQrCode {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseavailableQrCode();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.qrCodeType = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): availableQrCode {
+    return { qrCodeType: isSet(object.qrCodeType) ? globalThis.String(object.qrCodeType) : "" };
+  },
+
+  toJSON(message: availableQrCode): unknown {
+    const obj: any = {};
+    if (message.qrCodeType !== "") {
+      obj.qrCodeType = message.qrCodeType;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<availableQrCode>, I>>(base?: I): availableQrCode {
+    return availableQrCode.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<availableQrCode>, I>>(object: I): availableQrCode {
+    const message = createBaseavailableQrCode();
+    message.qrCodeType = object.qrCodeType ?? "";
+    return message;
+  },
+};
+
+function createBaseavailableOTR(): availableOTR {
+  return { retailOutletName: "" };
+}
+
+export const availableOTR: MessageFns<availableOTR> = {
+  encode(message: availableOTR, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.retailOutletName !== "") {
+      writer.uint32(10).string(message.retailOutletName);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): availableOTR {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseavailableOTR();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.retailOutletName = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): availableOTR {
+    return { retailOutletName: isSet(object.retailOutletName) ? globalThis.String(object.retailOutletName) : "" };
+  },
+
+  toJSON(message: availableOTR): unknown {
+    const obj: any = {};
+    if (message.retailOutletName !== "") {
+      obj.retailOutletName = message.retailOutletName;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<availableOTR>, I>>(base?: I): availableOTR {
+    return availableOTR.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<availableOTR>, I>>(object: I): availableOTR {
+    const message = createBaseavailableOTR();
+    message.retailOutletName = object.retailOutletName ?? "";
     return message;
   },
 };
