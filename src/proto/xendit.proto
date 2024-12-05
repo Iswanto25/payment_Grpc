@@ -2,10 +2,14 @@ syntax = "proto3";
 
 // npx protoc --ts_proto_out=src/generated/ --proto_path=src/proto src/proto/*.proto
 
-package xendit;
+package payment;
 
 service paymentService {
     rpc CreateInvoice (CreateInvoiceRequest) returns (InvoiceResponse);
+    rpc CreateVirtualAccount (CreateVirtualAccountRequest) returns (VirtualAccountResponse);
+    rpc CreateQrCodes (CreateQrCodesRequest) returns (CreateQrCodesResponse);
+    rpc CreateRetailOutlet (CreateRetailOutletRequest) returns (CreateRetailOutletResponse);
+    rpc CreateEwallet (CreateEwalletRequest) returns (CreateEwalletResponse);
 }
 
 message CreateInvoiceRequest {
@@ -14,6 +18,40 @@ message CreateInvoiceRequest {
     string payer_email = 3;
     string description = 4;
     string credentials = 5;
+}
+
+message CreateVirtualAccountRequest {
+    string external_id = 1;
+    string bank_code = 2;
+    string name = 3;
+}
+
+message CreateQrCodesRequest {
+    string reference_id = 1;
+    string type = 2;
+    string currency = 3;
+    int32 amount = 4;
+    string expires_at = 5;
+}
+
+message CreateRetailOutletRequest {
+    string external_id = 1;
+    string retail_outlet_name = 2;
+    string name = 3;
+    int32 expected_amount = 4;
+}
+
+message CreateEwalletRequest {
+    string reference_id = 1;
+    string checkout_method = 2;
+    string channel_code = 3;
+    string currency = 4;
+    int32 amount = 5;
+    channel_properties channel_properties = 6;
+}
+
+message channel_properties {
+    string mobile_number = 1;
 }
 
 message InvoiceResponse {
@@ -31,22 +69,63 @@ message InvoiceResponse {
 }
 
 message availableBanks {
-    string bank_code = 1;
-    string collection_type = 2;
-    int32 transfer_amount = 3;
-    string bank_branch = 4;
-    string account_holder_name = 5;
-    int32 identity_amount = 6;
+    string bankCode = 1;
+    string collectionType = 2;
+    int32 transferAmount = 3;
+    string bankBranch = 4;
+    string accountHolderName = 5;
+    int32 identityAmount = 6;
 }
 
 message availableEwallets {
-    string ewallet_type = 1;
+    string ewalletType = 1;
 }
 
 message availableQrCode {
-    string qr_code_type = 1;
+    string qrCodeType = 1;
 }
 
 message availableOTR {
-    string retail_outlet_name = 1;
+    string retailOutletName = 1;
+}
+
+message VirtualAccountResponse {
+    string id = 1;
+    string externalId = 2;
+    string bankCode = 3;
+    string name = 4;
+    string accountNumber = 5;
+    string status = 6;
+}
+
+message CreateQrCodesResponse {
+    string referenceId = 1;
+    string type = 2;
+    string currency = 3;
+    string channelCode = 4;
+    int32 amount = 5;
+    string expiresAt = 6;
+    string qrString = 7;
+    string status = 8;
+}
+
+message CreateRetailOutletResponse {
+    string id = 1;
+    string externalId = 2;
+    string retailOutletName = 3;
+    string name = 4;
+    string expected_amount = 5;
+    string status = 6;
+    string paymentCode = 7;
+}
+
+message CreateEwalletResponse {
+    string id = 1;
+    string referenceId = 2;
+    string checkoutMethod = 3;
+    string channelCode = 4;
+    int32 chargeAmount = 5;
+    int32 captureAmount = 6;
+    string callbackUrl = 7;
+    channel_properties channelProperties = 8;
 }
