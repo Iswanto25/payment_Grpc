@@ -10,6 +10,7 @@ export const createInvoiceControllers = async (
 ) => {
     try {
         const request = call.request;
+        console.log('Request:', request);
         const response = await createInvoiceService(request);
         const result: InvoiceResponse = {
             id: response.id,

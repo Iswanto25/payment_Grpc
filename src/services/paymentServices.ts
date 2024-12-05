@@ -7,7 +7,7 @@ const credentials = Buffer.from(`${secretKey}`).toString('base64');
 
 export const createInvoiceService = async (data: any): Promise<any> => {
     try {
-        const response = await axios.post(`${urlCreatePayment}/v2/invoices`, data, {
+        return await axios.post(`${urlCreatePayment}/v2/invoices`, data, {
             headers: {
                 'Authorization': `Basic ${credentials}`,
                 'Content-Type': 'application/json'
@@ -20,13 +20,13 @@ export const createInvoiceService = async (data: any): Promise<any> => {
 
 export const createVirtualAccountService = async (data: any): Promise<any> => {
     try {
-        const response = await axios.post(`${urlCreatePayment}/callback_virtual_accounts`, data, {
+        const result = await axios.post(`${urlCreatePayment}/callback_virtual_accounts`, data, {
             headers: {
                 'Authorization': `Basic ${credentials}`,
                 'Content-Type': 'application/json'
             }
         });
-        return response.data;
+        return result;
     } catch (error) {
         throw new Error(`Error creating virtual account: ${error}`);
     }
@@ -34,16 +34,40 @@ export const createVirtualAccountService = async (data: any): Promise<any> => {
 
 export const createQrCodeService = async (data: any): Promise<any> => {
     try {
-        const response = await axios.post(`${urlCreatePayment}/qr_codes`, data, {
+        return await axios.post(`${urlCreatePayment}/qr_codes`, data, {
             headers: {
                 'Authorization': `Basic ${credentials}`,
                 'api-version': '2022-07-31',
                 'Content-Type': 'application/json'
             },
         });
-        console.log(response.data);
-        return response.data;
     } catch (error) {
         throw new Error(`Error creating QR code: ${error}`);
+    }
+};
+
+export const createEwalletService = async (data: any): Promise<any> => {
+    try {
+        return await axios.post(`${urlCreatePayment}/ewallets/charges`, data, {
+            headers: {
+                'Authorization': `Basic ${credentials}`,
+                'Content-Type': 'application/json'
+            }
+        });
+    } catch (error) {
+        throw new Error(`Error creating e-wallet: ${error}`);
+    }
+};
+
+export const createRetailOutletService = async (data: any): Promise<any> => {
+    try {
+        return await axios.post(`${urlCreatePayment}/fixed_payment_code`, data, {
+            headers: {
+                'Authorization': `Basic ${credentials}`,
+                'Content-Type': 'application/json'
+            },
+        });
+    } catch (error) {
+        throw new Error(`Error creating retail outlet: ${error}`);
     }
 };

@@ -2,7 +2,9 @@ import * as grpc from '@grpc/grpc-js';
 import { createInvoiceControllers } from '../controllers/invoicesControllers';
 import { createOpenVirtualAccountControllers } from '../controllers/virtualAccountControllers';
 import { createQrCodeController } from '../controllers/qrCodeControllers';
-import { grpcObject } from '../config/xenditConfig'; // Memastikan gRPC Object dimuat
+import { createOutletControllers } from '../controllers/outletControllers';
+import { createEwalletChargeControllers } from '../controllers/ewalletChargeControllers';
+import { grpcObject } from '../config/xenditConfig';
 
 export const createInvoicesRoutes = (server: grpc.Server) => {
     console.log('Menambahkan route CreateInvoice');
@@ -10,5 +12,7 @@ export const createInvoicesRoutes = (server: grpc.Server) => {
         CreateInvoice: createInvoiceControllers,
         createVirtualAccount: createOpenVirtualAccountControllers,
         CreateQrCodes: createQrCodeController,
+        CreateRetailOutlet: createOutletControllers,
+        CreateEwallet: createEwalletChargeControllers,
     });
 };

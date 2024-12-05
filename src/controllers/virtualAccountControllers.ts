@@ -10,17 +10,16 @@ export const createOpenVirtualAccountControllers = async (
         try {
             const request = call.request;
             const response = await createVirtualAccountService(request);
-            console.log(response);
+            console.log(response.data.owner_id);
             const result: VirtualAccountResponse = {
-                id: response.id,
-                externalId: response.external_id,
-                name: response.name,
-                bankCode: response.bank_code,
-                accountNumber: response.account_number,
-                status: response.status,
+                id: response.data.id,
+                externalId: response.data.external_id,
+                name: response.data.name,
+                bankCode: response.data.bank_code,
+                accountNumber: response.data.account_number,
+                status: response.data.status,
             };
-            const data = successResponse('Virtual account created successfully', result, grpc.status.OK);
-            console.log(data);
+            // const data = successResponse('Virtual account created successfully', result, grpc.status.OK);
             callback(null, result);
         } catch (error) {
             callback({ code: grpc.status.INTERNAL,

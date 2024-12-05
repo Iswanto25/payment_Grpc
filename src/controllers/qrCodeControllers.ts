@@ -9,14 +9,14 @@ export const createQrCodeController = async (call: grpc.ServerUnaryCall<CreateQr
         const request = call.request;
         const response = await createQrCodeService(request);
         const result: CreateQrCodesResponse = {
-            referenceId: response.reference_id,
-            type: response.type,
-            channelCode: response.channel_code,
-            amount: response.amount,
-            currency: response.currency,
-            expiresAt: response.expires_at,
-            qrString: response.qr_string,
-            status: response.status,
+            referenceId: response.data.reference_id,
+            type: response.data.type,
+            channelCode: response.data.channel_code,
+            amount: response.data.amount,
+            currency: response.data.currency,
+            expiresAt: response.data.expires_at,
+            qrString: response.data.qr_string,
+            status: response.data.status,
         };
         const data = successResponse('QR code created successfully', result, grpc.status.OK);
         console.log(data);
