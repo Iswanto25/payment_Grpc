@@ -2,10 +2,12 @@ syntax = "proto3";
 
 // npx protoc --ts_proto_out=src/generated/ --proto_path=src/proto src/proto/*.proto
 
-package xendit;
+package payment;
 
 service paymentService {
     rpc CreateInvoice (CreateInvoiceRequest) returns (InvoiceResponse);
+    rpc CreateVirtualAccount (CreateVirtualAccountRequest) returns (VirtualAccountResponse);
+    rpc CreateQrCodes (CreateQrCodesRequest) returns (CreateQrCodesResponse);
 }
 
 message CreateInvoiceRequest {
@@ -15,6 +17,20 @@ message CreateInvoiceRequest {
     string description = 4;
     string credentials = 5;
 }
+
+message CreateVirtualAccountRequest {
+    string external_id = 1;
+    string bank_code = 2;
+    string name = 3;
+}
+
+message CreateQrCodesRequest {
+    string reference_id = 1;
+    string type = 2;
+    string currency = 3;
+    int32 amount = 4;
+    string expires_at = 5;
+}   
 
 message InvoiceResponse {
     string id = 1;
@@ -49,4 +65,24 @@ message availableQrCode {
 
 message availableOTR {
     string retail_outlet_name = 1;
+}
+
+message VirtualAccountResponse {
+    string id = 1;
+    string external_id = 2;
+    string bank_code = 3;
+    string name = 4;
+    string account_number = 5;
+    string status = 6;
+}
+
+message CreateQrCodesResponse {
+    string reference_id = 1;
+    string type = 2;
+    string currency = 3;
+    string channel_code = 4;
+    int32 amount = 5;
+    string expires_at = 6;
+    string qr_string = 7;
+    string status = 8;
 }
