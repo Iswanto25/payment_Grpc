@@ -127,6 +127,46 @@ export interface CreateEwalletResponse {
   channelProperties: channelProperties | undefined;
 }
 
+export interface PaymentVARequest {
+  /** Jenis provider (Xendit, Midtrans, dll) */
+  providerType: string;
+  /** ID referensi transaksi */
+  externalId: string;
+  /** Kode bank */
+  bankCode: string;
+  /** Nama pemilik akun */
+  name: string;
+  /** Jumlah pembayaran (gunakan int64 untuk mendukung jumlah besar) */
+  amount: number;
+  /** Jenis pembayaran, opsional untuk provider tertentu */
+  paymentType: string;
+}
+
+export interface PaymentVAResponse {
+  id: string;
+  /** Jenis provider (Xendit, Midtrans, dll) */
+  providerType: string;
+  /** ID referensi transaksi */
+  externalId: string;
+  /** Nomor VA */
+  accountNumber: string;
+  /** Nama pemilik akun */
+  name: string;
+  /** Kode bank */
+  bankCode: string;
+  /** Status pembayaran */
+  status: string;
+  /** Jumlah pembayaran (gunakan int64 untuk mendukung jumlah besar) */
+  amount: number;
+}
+
+export interface VaNumber {
+  /** Nama bank */
+  bank: string;
+  /** Nomor VA */
+  vaNumber: string;
+}
+
 function createBaseCreateInvoiceRequest(): CreateInvoiceRequest {
   return { externalId: "", amount: 0, payerEmail: "", description: "", credentials: "" };
 }
@@ -2007,12 +2047,402 @@ export const CreateEwalletResponse: MessageFns<CreateEwalletResponse> = {
   },
 };
 
+function createBasePaymentVARequest(): PaymentVARequest {
+  return { providerType: "", externalId: "", bankCode: "", name: "", amount: 0, paymentType: "" };
+}
+
+export const PaymentVARequest: MessageFns<PaymentVARequest> = {
+  encode(message: PaymentVARequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.providerType !== "") {
+      writer.uint32(10).string(message.providerType);
+    }
+    if (message.externalId !== "") {
+      writer.uint32(18).string(message.externalId);
+    }
+    if (message.bankCode !== "") {
+      writer.uint32(26).string(message.bankCode);
+    }
+    if (message.name !== "") {
+      writer.uint32(34).string(message.name);
+    }
+    if (message.amount !== 0) {
+      writer.uint32(40).int64(message.amount);
+    }
+    if (message.paymentType !== "") {
+      writer.uint32(50).string(message.paymentType);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PaymentVARequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePaymentVARequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.providerType = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.externalId = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.bankCode = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        }
+        case 5: {
+          if (tag !== 40) {
+            break;
+          }
+
+          message.amount = longToNumber(reader.int64());
+          continue;
+        }
+        case 6: {
+          if (tag !== 50) {
+            break;
+          }
+
+          message.paymentType = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PaymentVARequest {
+    return {
+      providerType: isSet(object.providerType) ? globalThis.String(object.providerType) : "",
+      externalId: isSet(object.externalId) ? globalThis.String(object.externalId) : "",
+      bankCode: isSet(object.bankCode) ? globalThis.String(object.bankCode) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      amount: isSet(object.amount) ? globalThis.Number(object.amount) : 0,
+      paymentType: isSet(object.paymentType) ? globalThis.String(object.paymentType) : "",
+    };
+  },
+
+  toJSON(message: PaymentVARequest): unknown {
+    const obj: any = {};
+    if (message.providerType !== "") {
+      obj.providerType = message.providerType;
+    }
+    if (message.externalId !== "") {
+      obj.externalId = message.externalId;
+    }
+    if (message.bankCode !== "") {
+      obj.bankCode = message.bankCode;
+    }
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    if (message.amount !== 0) {
+      obj.amount = Math.round(message.amount);
+    }
+    if (message.paymentType !== "") {
+      obj.paymentType = message.paymentType;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<PaymentVARequest>, I>>(base?: I): PaymentVARequest {
+    return PaymentVARequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<PaymentVARequest>, I>>(object: I): PaymentVARequest {
+    const message = createBasePaymentVARequest();
+    message.providerType = object.providerType ?? "";
+    message.externalId = object.externalId ?? "";
+    message.bankCode = object.bankCode ?? "";
+    message.name = object.name ?? "";
+    message.amount = object.amount ?? 0;
+    message.paymentType = object.paymentType ?? "";
+    return message;
+  },
+};
+
+function createBasePaymentVAResponse(): PaymentVAResponse {
+  return { id: "", providerType: "", externalId: "", accountNumber: "", name: "", bankCode: "", status: "", amount: 0 };
+}
+
+export const PaymentVAResponse: MessageFns<PaymentVAResponse> = {
+  encode(message: PaymentVAResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.providerType !== "") {
+      writer.uint32(18).string(message.providerType);
+    }
+    if (message.externalId !== "") {
+      writer.uint32(26).string(message.externalId);
+    }
+    if (message.accountNumber !== "") {
+      writer.uint32(34).string(message.accountNumber);
+    }
+    if (message.name !== "") {
+      writer.uint32(42).string(message.name);
+    }
+    if (message.bankCode !== "") {
+      writer.uint32(50).string(message.bankCode);
+    }
+    if (message.status !== "") {
+      writer.uint32(58).string(message.status);
+    }
+    if (message.amount !== 0) {
+      writer.uint32(64).int64(message.amount);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PaymentVAResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePaymentVAResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.providerType = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.externalId = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.accountNumber = reader.string();
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        }
+        case 6: {
+          if (tag !== 50) {
+            break;
+          }
+
+          message.bankCode = reader.string();
+          continue;
+        }
+        case 7: {
+          if (tag !== 58) {
+            break;
+          }
+
+          message.status = reader.string();
+          continue;
+        }
+        case 8: {
+          if (tag !== 64) {
+            break;
+          }
+
+          message.amount = longToNumber(reader.int64());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PaymentVAResponse {
+    return {
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      providerType: isSet(object.providerType) ? globalThis.String(object.providerType) : "",
+      externalId: isSet(object.externalId) ? globalThis.String(object.externalId) : "",
+      accountNumber: isSet(object.accountNumber) ? globalThis.String(object.accountNumber) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      bankCode: isSet(object.bankCode) ? globalThis.String(object.bankCode) : "",
+      status: isSet(object.status) ? globalThis.String(object.status) : "",
+      amount: isSet(object.amount) ? globalThis.Number(object.amount) : 0,
+    };
+  },
+
+  toJSON(message: PaymentVAResponse): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.providerType !== "") {
+      obj.providerType = message.providerType;
+    }
+    if (message.externalId !== "") {
+      obj.externalId = message.externalId;
+    }
+    if (message.accountNumber !== "") {
+      obj.accountNumber = message.accountNumber;
+    }
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    if (message.bankCode !== "") {
+      obj.bankCode = message.bankCode;
+    }
+    if (message.status !== "") {
+      obj.status = message.status;
+    }
+    if (message.amount !== 0) {
+      obj.amount = Math.round(message.amount);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<PaymentVAResponse>, I>>(base?: I): PaymentVAResponse {
+    return PaymentVAResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<PaymentVAResponse>, I>>(object: I): PaymentVAResponse {
+    const message = createBasePaymentVAResponse();
+    message.id = object.id ?? "";
+    message.providerType = object.providerType ?? "";
+    message.externalId = object.externalId ?? "";
+    message.accountNumber = object.accountNumber ?? "";
+    message.name = object.name ?? "";
+    message.bankCode = object.bankCode ?? "";
+    message.status = object.status ?? "";
+    message.amount = object.amount ?? 0;
+    return message;
+  },
+};
+
+function createBaseVaNumber(): VaNumber {
+  return { bank: "", vaNumber: "" };
+}
+
+export const VaNumber: MessageFns<VaNumber> = {
+  encode(message: VaNumber, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.bank !== "") {
+      writer.uint32(10).string(message.bank);
+    }
+    if (message.vaNumber !== "") {
+      writer.uint32(18).string(message.vaNumber);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): VaNumber {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVaNumber();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.bank = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.vaNumber = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): VaNumber {
+    return {
+      bank: isSet(object.bank) ? globalThis.String(object.bank) : "",
+      vaNumber: isSet(object.vaNumber) ? globalThis.String(object.vaNumber) : "",
+    };
+  },
+
+  toJSON(message: VaNumber): unknown {
+    const obj: any = {};
+    if (message.bank !== "") {
+      obj.bank = message.bank;
+    }
+    if (message.vaNumber !== "") {
+      obj.vaNumber = message.vaNumber;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<VaNumber>, I>>(base?: I): VaNumber {
+    return VaNumber.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<VaNumber>, I>>(object: I): VaNumber {
+    const message = createBaseVaNumber();
+    message.bank = object.bank ?? "";
+    message.vaNumber = object.vaNumber ?? "";
+    return message;
+  },
+};
+
 export interface paymentService {
   CreateInvoice(request: CreateInvoiceRequest): Promise<InvoiceResponse>;
   CreateVirtualAccount(request: CreateVirtualAccountRequest): Promise<VirtualAccountResponse>;
   CreateQrCodes(request: CreateQrCodesRequest): Promise<CreateQrCodesResponse>;
   CreateRetailOutlet(request: CreateRetailOutletRequest): Promise<CreateRetailOutletResponse>;
   CreateEwallet(request: CreateEwalletRequest): Promise<CreateEwalletResponse>;
+  /** provider: 0 = midtrans, 1 = xendit */
+  CreateVAPayment(request: PaymentVARequest): Promise<PaymentVAResponse>;
 }
 
 export const paymentServiceServiceName = "payment.paymentService";
@@ -2027,6 +2457,7 @@ export class paymentServiceClientImpl implements paymentService {
     this.CreateQrCodes = this.CreateQrCodes.bind(this);
     this.CreateRetailOutlet = this.CreateRetailOutlet.bind(this);
     this.CreateEwallet = this.CreateEwallet.bind(this);
+    this.CreateVAPayment = this.CreateVAPayment.bind(this);
   }
   CreateInvoice(request: CreateInvoiceRequest): Promise<InvoiceResponse> {
     const data = CreateInvoiceRequest.encode(request).finish();
@@ -2057,6 +2488,12 @@ export class paymentServiceClientImpl implements paymentService {
     const promise = this.rpc.request(this.service, "CreateEwallet", data);
     return promise.then((data) => CreateEwalletResponse.decode(new BinaryReader(data)));
   }
+
+  CreateVAPayment(request: PaymentVARequest): Promise<PaymentVAResponse> {
+    const data = PaymentVARequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "CreateVAPayment", data);
+    return promise.then((data) => PaymentVAResponse.decode(new BinaryReader(data)));
+  }
 }
 
 interface Rpc {
@@ -2074,6 +2511,17 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function longToNumber(int64: { toString(): string }): number {
+  const num = globalThis.Number(int64.toString());
+  if (num > globalThis.Number.MAX_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  if (num < globalThis.Number.MIN_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");
+  }
+  return num;
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

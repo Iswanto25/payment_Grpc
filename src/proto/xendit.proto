@@ -10,11 +10,13 @@ service paymentService {
     rpc CreateQrCodes (CreateQrCodesRequest) returns (CreateQrCodesResponse);
     rpc CreateRetailOutlet (CreateRetailOutletRequest) returns (CreateRetailOutletResponse);
     rpc CreateEwallet (CreateEwalletRequest) returns (CreateEwalletResponse);
+    // provider: 0 = midtrans, 1 = xendit
+    rpc CreateVAPayment (PaymentVARequest) returns (PaymentVAResponse);
 }
 
 message CreateInvoiceRequest {
     string external_id = 1;
-    int32 amount = 2;
+    float amount = 2;
     string payer_email = 3;
     string description = 4;
     string credentials = 5;
@@ -30,7 +32,7 @@ message CreateQrCodesRequest {
     string reference_id = 1;
     string type = 2;
     string currency = 3;
-    int32 amount = 4;
+    float amount = 4;
     string expires_at = 5;
 }
 
@@ -38,7 +40,7 @@ message CreateRetailOutletRequest {
     string external_id = 1;
     string retail_outlet_name = 2;
     string name = 3;
-    int32 expected_amount = 4;
+    float expected_amount = 4;
 }
 
 message CreateEwalletRequest {
@@ -46,7 +48,7 @@ message CreateEwalletRequest {
     string checkout_method = 2;
     string channel_code = 3;
     string currency = 4;
-    int32 amount = 5;
+    float amount = 5;
     channel_properties channel_properties = 6;
 }
 
@@ -58,7 +60,7 @@ message InvoiceResponse {
     string id = 1;
     string extenalId = 2;
     string status = 3;
-    int32 amount = 6;
+    float amount = 6;
     string description = 7;
     string invoicesUrl = 8;
     repeated availableBanks availableBanks = 9;
@@ -71,10 +73,10 @@ message InvoiceResponse {
 message availableBanks {
     string bankCode = 1;
     string collectionType = 2;
-    int32 transferAmount = 3;
+    float transferAmount = 3;
     string bankBranch = 4;
     string accountHolderName = 5;
-    int32 identityAmount = 6;
+    float identityAmount = 6;
 }
 
 message availableEwallets {
@@ -103,7 +105,7 @@ message CreateQrCodesResponse {
     string type = 2;
     string currency = 3;
     string channelCode = 4;
-    int32 amount = 5;
+    float amount = 5;
     string expiresAt = 6;
     string qrString = 7;
     string status = 8;
@@ -124,8 +126,33 @@ message CreateEwalletResponse {
     string referenceId = 2;
     string checkoutMethod = 3;
     string channelCode = 4;
-    int32 chargeAmount = 5;
-    int32 captureAmount = 6;
+    float chargeAmount = 5;
+    float captureAmount = 6;
     string callbackUrl = 7;
     channel_properties channelProperties = 8;
+}
+
+message PaymentVARequest {
+    string providerType = 1;      // Jenis provider (Xendit, Midtrans, dll)
+    string externalId = 2;       // ID referensi transaksi
+    string bankCode = 3;          // Kode bank
+    string name = 4;               // Nama pemilik akun
+    float amount = 5;              // Jumlah pembayaran (gunakan int64 untuk mendukung jumlah besar)
+    string paymentType = 6;       // Jenis pembayaran, opsional untuk provider tertentu
+}
+
+message PaymentVAResponse {
+    string id = 1;
+    string providerType = 2;      // Jenis provider (Xendit, Midtrans, dll)
+    string externalId = 3;       // ID referensi transaksi
+    string accountNumber = 4;          // Nomor VA
+    string name = 5;               // Nama pemilik akun
+    string bankCode = 6;          // Kode bank
+    string status = 7;             // Status pembayaran
+    float amount = 8;              // Jumlah pembayaran (gunakan int64 untuk mendukung jumlah besar)
+}
+
+message VaNumber {
+    string bank = 1;              // Nama bank
+    string va_number = 2;         // Nomor VA
 }
