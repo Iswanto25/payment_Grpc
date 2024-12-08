@@ -177,7 +177,7 @@ export const CreateInvoiceRequest: MessageFns<CreateInvoiceRequest> = {
       writer.uint32(10).string(message.externalId);
     }
     if (message.amount !== 0) {
-      writer.uint32(16).int32(message.amount);
+      writer.uint32(21).float(message.amount);
     }
     if (message.payerEmail !== "") {
       writer.uint32(26).string(message.payerEmail);
@@ -207,11 +207,11 @@ export const CreateInvoiceRequest: MessageFns<CreateInvoiceRequest> = {
           continue;
         }
         case 2: {
-          if (tag !== 16) {
+          if (tag !== 21) {
             break;
           }
 
-          message.amount = reader.int32();
+          message.amount = reader.float();
           continue;
         }
         case 3: {
@@ -263,7 +263,7 @@ export const CreateInvoiceRequest: MessageFns<CreateInvoiceRequest> = {
       obj.externalId = message.externalId;
     }
     if (message.amount !== 0) {
-      obj.amount = Math.round(message.amount);
+      obj.amount = message.amount;
     }
     if (message.payerEmail !== "") {
       obj.payerEmail = message.payerEmail;
@@ -399,7 +399,7 @@ export const CreateQrCodesRequest: MessageFns<CreateQrCodesRequest> = {
       writer.uint32(26).string(message.currency);
     }
     if (message.amount !== 0) {
-      writer.uint32(32).int32(message.amount);
+      writer.uint32(37).float(message.amount);
     }
     if (message.expiresAt !== "") {
       writer.uint32(42).string(message.expiresAt);
@@ -439,11 +439,11 @@ export const CreateQrCodesRequest: MessageFns<CreateQrCodesRequest> = {
           continue;
         }
         case 4: {
-          if (tag !== 32) {
+          if (tag !== 37) {
             break;
           }
 
-          message.amount = reader.int32();
+          message.amount = reader.float();
           continue;
         }
         case 5: {
@@ -485,7 +485,7 @@ export const CreateQrCodesRequest: MessageFns<CreateQrCodesRequest> = {
       obj.currency = message.currency;
     }
     if (message.amount !== 0) {
-      obj.amount = Math.round(message.amount);
+      obj.amount = message.amount;
     }
     if (message.expiresAt !== "") {
       obj.expiresAt = message.expiresAt;
@@ -523,7 +523,7 @@ export const CreateRetailOutletRequest: MessageFns<CreateRetailOutletRequest> = 
       writer.uint32(26).string(message.name);
     }
     if (message.expectedAmount !== 0) {
-      writer.uint32(32).int32(message.expectedAmount);
+      writer.uint32(37).float(message.expectedAmount);
     }
     return writer;
   },
@@ -560,11 +560,11 @@ export const CreateRetailOutletRequest: MessageFns<CreateRetailOutletRequest> = 
           continue;
         }
         case 4: {
-          if (tag !== 32) {
+          if (tag !== 37) {
             break;
           }
 
-          message.expectedAmount = reader.int32();
+          message.expectedAmount = reader.float();
           continue;
         }
       }
@@ -597,7 +597,7 @@ export const CreateRetailOutletRequest: MessageFns<CreateRetailOutletRequest> = 
       obj.name = message.name;
     }
     if (message.expectedAmount !== 0) {
-      obj.expectedAmount = Math.round(message.expectedAmount);
+      obj.expectedAmount = message.expectedAmount;
     }
     return obj;
   },
@@ -641,7 +641,7 @@ export const CreateEwalletRequest: MessageFns<CreateEwalletRequest> = {
       writer.uint32(34).string(message.currency);
     }
     if (message.amount !== 0) {
-      writer.uint32(40).int32(message.amount);
+      writer.uint32(45).float(message.amount);
     }
     if (message.channelProperties !== undefined) {
       channelProperties.encode(message.channelProperties, writer.uint32(50).fork()).join();
@@ -689,11 +689,11 @@ export const CreateEwalletRequest: MessageFns<CreateEwalletRequest> = {
           continue;
         }
         case 5: {
-          if (tag !== 40) {
+          if (tag !== 45) {
             break;
           }
 
-          message.amount = reader.int32();
+          message.amount = reader.float();
           continue;
         }
         case 6: {
@@ -741,7 +741,7 @@ export const CreateEwalletRequest: MessageFns<CreateEwalletRequest> = {
       obj.currency = message.currency;
     }
     if (message.amount !== 0) {
-      obj.amount = Math.round(message.amount);
+      obj.amount = message.amount;
     }
     if (message.channelProperties !== undefined) {
       obj.channelProperties = channelProperties.toJSON(message.channelProperties);
@@ -852,7 +852,7 @@ export const InvoiceResponse: MessageFns<InvoiceResponse> = {
       writer.uint32(26).string(message.status);
     }
     if (message.amount !== 0) {
-      writer.uint32(48).int32(message.amount);
+      writer.uint32(53).float(message.amount);
     }
     if (message.description !== "") {
       writer.uint32(58).string(message.description);
@@ -910,11 +910,11 @@ export const InvoiceResponse: MessageFns<InvoiceResponse> = {
           continue;
         }
         case 6: {
-          if (tag !== 48) {
+          if (tag !== 53) {
             break;
           }
 
-          message.amount = reader.int32();
+          message.amount = reader.float();
           continue;
         }
         case 7: {
@@ -1018,7 +1018,7 @@ export const InvoiceResponse: MessageFns<InvoiceResponse> = {
       obj.status = message.status;
     }
     if (message.amount !== 0) {
-      obj.amount = Math.round(message.amount);
+      obj.amount = message.amount;
     }
     if (message.description !== "") {
       obj.description = message.description;
@@ -1084,7 +1084,7 @@ export const availableBanks: MessageFns<availableBanks> = {
       writer.uint32(18).string(message.collectionType);
     }
     if (message.transferAmount !== 0) {
-      writer.uint32(24).int32(message.transferAmount);
+      writer.uint32(29).float(message.transferAmount);
     }
     if (message.bankBranch !== "") {
       writer.uint32(34).string(message.bankBranch);
@@ -1093,7 +1093,7 @@ export const availableBanks: MessageFns<availableBanks> = {
       writer.uint32(42).string(message.accountHolderName);
     }
     if (message.identityAmount !== 0) {
-      writer.uint32(48).int32(message.identityAmount);
+      writer.uint32(53).float(message.identityAmount);
     }
     return writer;
   },
@@ -1122,11 +1122,11 @@ export const availableBanks: MessageFns<availableBanks> = {
           continue;
         }
         case 3: {
-          if (tag !== 24) {
+          if (tag !== 29) {
             break;
           }
 
-          message.transferAmount = reader.int32();
+          message.transferAmount = reader.float();
           continue;
         }
         case 4: {
@@ -1146,11 +1146,11 @@ export const availableBanks: MessageFns<availableBanks> = {
           continue;
         }
         case 6: {
-          if (tag !== 48) {
+          if (tag !== 53) {
             break;
           }
 
-          message.identityAmount = reader.int32();
+          message.identityAmount = reader.float();
           continue;
         }
       }
@@ -1182,7 +1182,7 @@ export const availableBanks: MessageFns<availableBanks> = {
       obj.collectionType = message.collectionType;
     }
     if (message.transferAmount !== 0) {
-      obj.transferAmount = Math.round(message.transferAmount);
+      obj.transferAmount = message.transferAmount;
     }
     if (message.bankBranch !== "") {
       obj.bankBranch = message.bankBranch;
@@ -1191,7 +1191,7 @@ export const availableBanks: MessageFns<availableBanks> = {
       obj.accountHolderName = message.accountHolderName;
     }
     if (message.identityAmount !== 0) {
-      obj.identityAmount = Math.round(message.identityAmount);
+      obj.identityAmount = message.identityAmount;
     }
     return obj;
   },
@@ -1553,7 +1553,7 @@ export const CreateQrCodesResponse: MessageFns<CreateQrCodesResponse> = {
       writer.uint32(34).string(message.channelCode);
     }
     if (message.amount !== 0) {
-      writer.uint32(40).int32(message.amount);
+      writer.uint32(45).float(message.amount);
     }
     if (message.expiresAt !== "") {
       writer.uint32(50).string(message.expiresAt);
@@ -1607,11 +1607,11 @@ export const CreateQrCodesResponse: MessageFns<CreateQrCodesResponse> = {
           continue;
         }
         case 5: {
-          if (tag !== 40) {
+          if (tag !== 45) {
             break;
           }
 
-          message.amount = reader.int32();
+          message.amount = reader.float();
           continue;
         }
         case 6: {
@@ -1675,7 +1675,7 @@ export const CreateQrCodesResponse: MessageFns<CreateQrCodesResponse> = {
       obj.channelCode = message.channelCode;
     }
     if (message.amount !== 0) {
-      obj.amount = Math.round(message.amount);
+      obj.amount = message.amount;
     }
     if (message.expiresAt !== "") {
       obj.expiresAt = message.expiresAt;
@@ -1890,10 +1890,10 @@ export const CreateEwalletResponse: MessageFns<CreateEwalletResponse> = {
       writer.uint32(34).string(message.channelCode);
     }
     if (message.chargeAmount !== 0) {
-      writer.uint32(40).int32(message.chargeAmount);
+      writer.uint32(45).float(message.chargeAmount);
     }
     if (message.captureAmount !== 0) {
-      writer.uint32(48).int32(message.captureAmount);
+      writer.uint32(53).float(message.captureAmount);
     }
     if (message.callbackUrl !== "") {
       writer.uint32(58).string(message.callbackUrl);
@@ -1944,19 +1944,19 @@ export const CreateEwalletResponse: MessageFns<CreateEwalletResponse> = {
           continue;
         }
         case 5: {
-          if (tag !== 40) {
+          if (tag !== 45) {
             break;
           }
 
-          message.chargeAmount = reader.int32();
+          message.chargeAmount = reader.float();
           continue;
         }
         case 6: {
-          if (tag !== 48) {
+          if (tag !== 53) {
             break;
           }
 
-          message.captureAmount = reader.int32();
+          message.captureAmount = reader.float();
           continue;
         }
         case 7: {
@@ -2014,10 +2014,10 @@ export const CreateEwalletResponse: MessageFns<CreateEwalletResponse> = {
       obj.channelCode = message.channelCode;
     }
     if (message.chargeAmount !== 0) {
-      obj.chargeAmount = Math.round(message.chargeAmount);
+      obj.chargeAmount = message.chargeAmount;
     }
     if (message.captureAmount !== 0) {
-      obj.captureAmount = Math.round(message.captureAmount);
+      obj.captureAmount = message.captureAmount;
     }
     if (message.callbackUrl !== "") {
       obj.callbackUrl = message.callbackUrl;
@@ -2066,7 +2066,7 @@ export const PaymentVARequest: MessageFns<PaymentVARequest> = {
       writer.uint32(34).string(message.name);
     }
     if (message.amount !== 0) {
-      writer.uint32(40).int64(message.amount);
+      writer.uint32(45).float(message.amount);
     }
     if (message.paymentType !== "") {
       writer.uint32(50).string(message.paymentType);
@@ -2114,11 +2114,11 @@ export const PaymentVARequest: MessageFns<PaymentVARequest> = {
           continue;
         }
         case 5: {
-          if (tag !== 40) {
+          if (tag !== 45) {
             break;
           }
 
-          message.amount = longToNumber(reader.int64());
+          message.amount = reader.float();
           continue;
         }
         case 6: {
@@ -2164,7 +2164,7 @@ export const PaymentVARequest: MessageFns<PaymentVARequest> = {
       obj.name = message.name;
     }
     if (message.amount !== 0) {
-      obj.amount = Math.round(message.amount);
+      obj.amount = message.amount;
     }
     if (message.paymentType !== "") {
       obj.paymentType = message.paymentType;
@@ -2215,7 +2215,7 @@ export const PaymentVAResponse: MessageFns<PaymentVAResponse> = {
       writer.uint32(58).string(message.status);
     }
     if (message.amount !== 0) {
-      writer.uint32(64).int64(message.amount);
+      writer.uint32(69).float(message.amount);
     }
     return writer;
   },
@@ -2284,11 +2284,11 @@ export const PaymentVAResponse: MessageFns<PaymentVAResponse> = {
           continue;
         }
         case 8: {
-          if (tag !== 64) {
+          if (tag !== 69) {
             break;
           }
 
-          message.amount = longToNumber(reader.int64());
+          message.amount = reader.float();
           continue;
         }
       }
@@ -2337,7 +2337,7 @@ export const PaymentVAResponse: MessageFns<PaymentVAResponse> = {
       obj.status = message.status;
     }
     if (message.amount !== 0) {
-      obj.amount = Math.round(message.amount);
+      obj.amount = message.amount;
     }
     return obj;
   },
@@ -2511,17 +2511,6 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
-
-function longToNumber(int64: { toString(): string }): number {
-  const num = globalThis.Number(int64.toString());
-  if (num > globalThis.Number.MAX_SAFE_INTEGER) {
-    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  if (num < globalThis.Number.MIN_SAFE_INTEGER) {
-    throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");
-  }
-  return num;
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

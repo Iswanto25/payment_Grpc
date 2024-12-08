@@ -5,7 +5,7 @@ import { createQrCodeController } from '../controllers/qrCodeControllers';
 import { createOutletControllers } from '../controllers/outletControllers';
 import { createEwalletChargeControllers } from '../controllers/ewalletChargeControllers';
 import { createVirtualAccount } from '../controllers/paymentVAControllers';
-import { grpcObject } from '../config/xenditConfig';
+import { grpcObject } from '../config/config';
 
 export const createInvoicesRoutes = (server: grpc.Server) => {
     console.log('Menambahkan route CreateInvoice');

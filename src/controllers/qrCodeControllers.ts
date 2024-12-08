@@ -1,6 +1,6 @@
 import * as grpc from '@grpc/grpc-js';
 import { xenditHandlerError } from "../utils/responses";
-import { createQrCodeService } from '../services/paymentServices';
+import { createQrCodeService } from '../features/xendit/services/xenditServices';
 import { successResponse } from '../utils/responses';
 import { CreateQrCodesRequest, CreateQrCodesResponse } from '../generated/xendit';
 
