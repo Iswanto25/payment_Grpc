@@ -23,25 +23,16 @@ export const createSnapService = async (data: any): Promise<any> => {
 
 export const createVAPaymentService = async (data: any): Promise<any> => {
     try {
-        const midtransRequest = {
-            payment_type: 'bank_transfer',
-            transaction_details: {
-                gross_amount: parseInt(data.amount),
-                order_id: data.externalId
-            },
-            bank_transfer: {
-                bank: data.bankCode
-            },
-        }
-        console.log(midtransRequest);
-        return await axios.post(`${midtranstUrlCreatePayment}/v2/charge`, midtransRequest, {
+        console.log('Data: ', data);
+        const response = await axios.post(`${midtranstUrlCreatePayment}/v2/charge`, data, {
             headers: {
                 'Content-Type': 'application/json',
                 'accept': 'application/json',
                 'Authorization': `Basic ${midtransCredentials}`
             }
         });
+        return response.data;
     } catch (error) {
-        throw new Error(`Error creating VA payment: ${error}`);
+        throw new Error(`Error creating Midtrans virtual account: ${error}`);
     }
 };

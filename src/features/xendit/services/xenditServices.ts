@@ -1,4 +1,12 @@
+import axios from "axios";
+import dotenv from 'dotenv';
+dotenv.config();
 import { xenditClientCreatePayment } from "../../../config/xenditConfig";
+
+const urlCreatePayment = process.env.XENDIT_API_URL_CREATE_PAYMENT;
+const secretKey = process.env.XENDIT_API_KEY;
+const credentials = Buffer.from(`${secretKey}`).toString('base64');
+console.log(credentials);
 
 export const createInvoiceService = async (data: any): Promise<any> => {
     try {
@@ -11,13 +19,32 @@ export const createInvoiceService = async (data: any): Promise<any> => {
 
 export const createVirtualAccountService = async (data: any): Promise<any> => {
     try {
-        // console.log(data);
-        const response = await xenditClientCreatePayment.post('/callback_virtual_accounts', data);
+        const response = await axios.post(`${urlCreatePayment}/callback_virtual_accounts`, data, {
+            headers: {
+                'Authorization': `Basic ${credentials}`,
+                'Content-Type': 'application/json'
+            }
+        });
         return response.data;
     } catch (error) {
-        throw new Error(`Error creating virtual account: ${error}`);
+        throw new Error(`Error creating xendit virtual account: ${error}`);
     }
-}
+};
+
+// export const createVirtualAccountService = async (data: any): Promise<any> => {
+//     try {
+//         const request = {
+//             external_id: "va-external-id-123",
+//             bank_code: "MANDIRI",
+//             name: "Rika Sutanto",
+//         };
+//         const response = await xenditClientCreatePayment.post('/callback_virtual_accounts', request);
+//         console.log('Response: ', response.data);
+//         return response.data;
+//     } catch (error) {
+//         throw new Error(`Error creating virtual account: ${error}`);
+//     }
+// }
 
 export const createQrCodeService = async (data: any): Promise<any> => {
     try {

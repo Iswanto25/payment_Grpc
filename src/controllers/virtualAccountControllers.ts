@@ -14,6 +14,7 @@ export const createOpenVirtualAccountControllers = async (
                 external_id: request.externalId,
                 bank_code: request.bankCode,
                 name: request.name,
+
             } as createXenditRequest;
             const response = await createVirtualAccountService(xenditRequest);
             const result: VirtualAccountResponse = {
