@@ -1,6 +1,6 @@
 import * as grpc from '@grpc/grpc-js';
 import { xenditHandlerError } from "../utils/responses";
-import { createEwalletService } from '../services/paymentServices';
+import { createEwalletService } from '../features/xendit/services/xenditServices';
 import { successResponse } from '../utils/responses';
 import { CreateEwalletRequest, CreateEwalletResponse } from '../generated/xendit';
 
@@ -12,7 +12,7 @@ export const createEwalletChargeControllers = async (
         const request = call.request;
         // console.log('Request:', request);
         const response = await createEwalletService(request);
-        console.log('Response:', response.data.id);
+        // console.log('Response:', response.data.id);
         const result: CreateEwalletResponse = {
             id: response.data.id,
             referenceId: response.data.reference_id,
