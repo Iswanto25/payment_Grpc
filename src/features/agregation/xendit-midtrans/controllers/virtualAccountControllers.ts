@@ -1,9 +1,9 @@
 import * as grpc from '@grpc/grpc-js';
-import { xenditHandlerError } from "../utils/responses";
-import { createVirtualAccountService } from '../features/xendit/services/xenditServices';
-import { successResponse } from '../utils/responses';
-import { createXenditRequest } from "../types/paymentBody";
-import { CreateVirtualAccountRequest, VirtualAccountResponse } from '../generated/xendit';
+import { xenditHandlerError } from "../../../../utils/responses";
+import { createVirtualAccountService } from '../../../xendit/services/xenditServices';
+import { successResponse } from '../../../../utils/responses';
+import { createXenditRequest } from "../../../../types/paymentBody";
+import { CreateVirtualAccountRequest, VirtualAccountResponse } from '../../../../generated/xendit';
 
 export const createOpenVirtualAccountControllers = async (
     call: grpc.ServerUnaryCall<CreateVirtualAccountRequest, VirtualAccountResponse>,

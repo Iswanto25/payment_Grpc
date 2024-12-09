@@ -1,7 +1,7 @@
 import * as grpc from '@grpc/grpc-js';
-import { createXenditVirtualAccountControllers } from '../features/xendit/controllers/xenditVAControllers';
-import { createVirtualAccountControllers } from '../features/midtrans/controllers/midtransVAControllers';
-import { PaymentVARequest, PaymentVAResponse } from '../generated/xendit';
+import { createXenditVirtualAccountControllers } from '../../../xendit/controllers/xenditVAControllers';
+import { createVirtualAccountControllers } from '../../../midtrans/controllers/midtransVAControllers';
+import { PaymentVARequest, PaymentVAResponse } from '../../../../generated/xendit';
 
 export const createVirtualAccount = async (
     call: grpc.ServerUnaryCall<PaymentVARequest, PaymentVAResponse>,

@@ -19,6 +19,7 @@ export const createInvoiceService = async (data: any): Promise<any> => {
 
 export const createVirtualAccountService = async (data: any): Promise<any> => {
     try {
+        console.log('Data: ', data);
         const response = await axios.post(`${urlCreatePayment}/callback_virtual_accounts`, data, {
             headers: {
                 'Authorization': `Basic ${credentials}`,

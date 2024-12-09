@@ -10,6 +10,7 @@ export const createXenditVirtualAccountControllers = async (call: grpc.ServerUna
             bank_code: request.bankCode,
             name: request.name,
         };
+        console.log('Data Request: ', dataRequest);
         const response = await createVirtualAccountService(dataRequest);
         const dataResponse: PaymentVAResponse = {
             id: response.id,

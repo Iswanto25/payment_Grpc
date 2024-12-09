@@ -1,8 +1,8 @@
 import * as grpc from '@grpc/grpc-js';
-import { xenditHandlerError } from "../utils/responses";
-import { createEwalletService } from '../features/xendit/services/xenditServices';
-import { successResponse } from '../utils/responses';
-import { CreateEwalletRequest, CreateEwalletResponse } from '../generated/xendit';
+import { xenditHandlerError } from "../../../../utils/responses";
+import { createEwalletService } from '../../../xendit/services/xenditServices';
+import { successResponse } from '../../../../utils/responses';
+import { CreateEwalletRequest, CreateEwalletResponse } from '../../../../generated/xendit';
 
 export const createEwalletChargeControllers = async (
     call: grpc.ServerUnaryCall<CreateEwalletRequest, CreateEwalletResponse>,

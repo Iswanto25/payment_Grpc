@@ -15,11 +15,18 @@
     "@grpc/grpc-js": "^1.12.3",
     "@grpc/proto-loader": "^0.7.13",
     "axios": "^1.7.9",
-    "dotenv": "^16.4.6"
+    "dotenv": "^16.4.6",
+    "expres": "^0.0.5",
+    "express": "^4.21.2",
+    "morgan": "^1.10.0",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
+    "@types/express": "^5.0.0",
     "@types/node": "^22.9.3",
+    "@types/cors": "^2.8.17",
+    "@types/morgan": "^1.9.9",
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
     "ts-proto": "^2.3.0",

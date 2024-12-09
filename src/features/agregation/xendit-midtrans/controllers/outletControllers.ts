@@ -1,8 +1,8 @@
 import * as grpc from '@grpc/grpc-js';
-import { xenditHandlerError } from "../utils/responses";
-import { createRetailOutletService } from '../features/xendit/services/xenditServices';
-import { successResponse } from '../utils/responses';
-import { CreateRetailOutletRequest, CreateRetailOutletResponse } from '../generated/xendit';
+import { xenditHandlerError } from "../../../../utils/responses";
+import { createRetailOutletService } from '../../../xendit/services/xenditServices';
+import { successResponse } from '../../../../utils/responses';
+import { CreateRetailOutletRequest, CreateRetailOutletResponse } from '../../../../generated/xendit';
 
 export const createOutletControllers = async (
     call: grpc.ServerUnaryCall<CreateRetailOutletRequest, CreateRetailOutletResponse>,
